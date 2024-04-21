@@ -26,7 +26,8 @@ This Flask application fetches random problems from Codeforces based on the user
    ```
 
 3. Run the Flask application:
-
+   <br>
+   Use `run_app.bat` script to open the app directly or using the following command
    ```bash
    python app.py
    ```
