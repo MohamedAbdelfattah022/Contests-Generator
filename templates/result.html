@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Problem Set Results</title>
+        <link rel="stylesheet"
+            href="{{ url_for('static', filename='style.css') }}">
+
+        <link rel="icon"
+            href="{{ url_for('static', filename='favicon.ico') }}">
+
+    </head>
+    <body>
+        <div class="container">
+            <label for="problem_codes"><h1>Problems Generated</h1></label>
+            <textarea id="problem_codes" readonly
+                rows="10">{{ codes }}</textarea>
+            <button id="copyButton">Copy Codes</button>
+        </div>
+
+        <script src="{{ url_for('static', filename='script.js') }}"></script>
+    </body>
+</html>

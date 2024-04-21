@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Problem Set Retrieval</title>
+
+        <link rel="stylesheet"
+            href="{{ url_for('static', filename='style.css') }}">
+
+        <link rel="icon"
+            href="{{ url_for('static', filename='favicon.ico') }}">
+
+    </head>
+    <body>
+        <div class="container">
+            <h1>Problem Set Retrieval</h1>
+            <form action="/result" method="post">
+                <label for="min_range">Min Rating</label>
+                <input type="number" id="min_range" name="min_range" min="800"
+                    max="3200" step="100" required>
+                <br>
+                <label for="max_range">Max Rating</label>
+                <input type="number" id="max_range" name="max_range" min="800"
+                    max="3200" step="100" required>
+                <br>
+                <label for="problems_num">Number of Problems</label>
+                <input type="number" id="problems_num" name="problems_num"
+                    min="1" required>
+                <br>
+                <input type="submit" value="Submit">
+            </form>
+
+            <!-- Error modal -->
+            <div id="errorModal" class="modal"
+                data-error-message="{{ error_message | join(' ') }}">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <span class="close">&times;</span>
+                    </div>
+                    <div class="modal-body">
+                        <p id="errorMessage"></p>
+                    </div>
+                </div>
+            </div>
+
+            <script
+                src="{{ url_for('static', filename='script.js') }}"></script>
+        </body>
+    </html>
