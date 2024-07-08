@@ -1,4 +1,11 @@
 # Flask Codeforces Problem Fetcher
+- [Flask Codeforces Problem Fetcher](#flask-codeforces-problem-fetcher)
+  - [Description](#description)
+  - [Features](#features)
+  - [Installation](#installation)
+  - [Usage](#usage)
+  - [Configuration](#configuration)
+  - [Contributing](#contributing)
 
 ## Description
 
