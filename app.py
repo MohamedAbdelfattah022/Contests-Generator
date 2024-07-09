@@ -3,6 +3,7 @@ import pandas as pd
 import sqlite3
 import requests
 from fetch_problemset import fetch
+from team import merge_solved_problems
 
 app = Flask(__name__)
 app.secret_key = 'e9aa5b78bce79caa06c445b364058979840b1ab60338fdc6'
@@ -20,11 +21,6 @@ def initialize_data():
             print("Failed to fetch data:", e)
 
 def retrieve_data(min_range, max_range, problems_num):
-    # try:
-    #     fetch()
-    # except (requests.ConnectionError, requests.HTTPError) as e:
-    #     pass
-
     conn = sqlite3.connect("problemset.db")
     query = f"SELECT * FROM problems WHERE rating >= {min_range} AND rating <= {max_range}"
     df = pd.read_sql(query, conn)
@@ -34,7 +30,7 @@ def retrieve_data(min_range, max_range, problems_num):
 def get_codes(frame):
     codes = []
     for i in range(len(frame)):
-        code = f"{frame['contestId'].iloc[i]}{frame['index'].iloc[i]}"
+        code = f"{int(frame['contestId'].iloc[i])}{frame['index'].iloc[i]}"
         codes.append(code)
     return ', '.join(codes)
 
