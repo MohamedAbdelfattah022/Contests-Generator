@@ -2,7 +2,9 @@ from flask import Flask, render_template, request, flash, redirect, url_for, get
 import pandas as pd
 import sqlite3
 import requests
+import json
 from fetch_problemset import fetch
+from team import merge_solved_problems
 
 app = Flask(__name__)
 app.secret_key = 'e9aa5b78bce79caa06c445b364058979840b1ab60338fdc6'
@@ -15,16 +17,13 @@ def initialize_data():
         try:
             fetch()
             app.config['data_fetched'] = True
-            print("data fetched")
+            print("Data Fetched")
         except (requests.ConnectionError, requests.HTTPError) as e:
             print("Failed to fetch data:", e)
+    else:
+        print("Data Already Fetched")
 
 def retrieve_data(min_range, max_range, problems_num):
-    # try:
-    #     fetch()
-    # except (requests.ConnectionError, requests.HTTPError) as e:
-    #     pass
-
     conn = sqlite3.connect("problemset.db")
     query = f"SELECT * FROM problems WHERE rating >= {min_range} AND rating <= {max_range}"
     df = pd.read_sql(query, conn)
@@ -34,7 +33,7 @@ def retrieve_data(min_range, max_range, problems_num):
 def get_codes(frame):
     codes = []
     for i in range(len(frame)):
-        code = f"{frame['contestId'].iloc[i]}{frame['index'].iloc[i]}"
+        code = f"{int(frame['contestId'].iloc[i])}{frame['index'].iloc[i]}"
         codes.append(code)
     return ', '.join(codes)
 
@@ -43,17 +42,46 @@ def index():
     error_message = get_flashed_messages(category_filter=['error'])
     return render_template('index.html', error_message=error_message)
 
+def get_unsolved_problems(handles, min_range, max_range):
+    conn = sqlite3.connect("problemset.db")
+    query = f"SELECT * FROM problems WHERE rating >= {min_range} AND rating <= {max_range}"
+    all_problems = pd.read_sql(query, conn)
+    conn.close()
+
+    solved_problems = merge_solved_problems(handles)
+    solved_problems_codes = solved_problems.apply(lambda row: f"{int(row['contestId'])}{row['index']}", axis=1)
+
+    unsolved_problems = all_problems[~all_problems.apply(lambda row: f"{int(row['contestId'])}{row['index']}", axis=1).isin(solved_problems_codes)]
+    
+    return unsolved_problems
+
 @app.route('/result/', methods=['POST'])
 def result():
     min_range = int(request.form['min_range'])
     max_range = int(request.form['max_range'])
     problems_num = int(request.form['problems_num'])
-
+    participant_type = request.form.get('participant_type')
+    
     if max_range < min_range:
         flash("Max range must be greater than or equal to Min range.", "error")
         return redirect(url_for('index'))
 
-    df = retrieve_data(min_range, max_range, problems_num)
+    handles = []
+    if participant_type == 'individual':
+        handles = [request.form.get('individual_handle')]
+    else:
+        handles = [request.form.get(f'team_handle_{i}') for i in range(1, 4) if request.form.get(f'team_handle_{i}')]
+    
+    print(f"\n{'='*10} {len(handles)} {'='*10}\n")
+    print(f"\n{'='*10} {handles} {'='*10}\n")
+
+    if (len(handles) == 1 and handles[0] == '' ) or (len(handles) == 0) :
+        print("No Handle")
+        df = retrieve_data(min_range, max_range, problems_num)
+    else:
+        print("Using Handle")
+        unsolved_df = get_unsolved_problems(handles, min_range, max_range)
+        df = unsolved_df.sample(problems_num)
     codes = get_codes(df)
 
     return render_template('result.html', codes=codes)

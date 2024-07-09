@@ -38,3 +38,29 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 	copyButton.addEventListener("click", copyToClipboard);
 });
+
+function toggleParticipantType() {
+	const individualHandle = document.getElementById('individual_handle');
+	const teamHandles = document.getElementById('teamHandles');
+	const participantType = document.querySelector('input[name="participant_type"]:checked').value;
+
+	if (participantType === 'individual') {
+		individualHandle.classList.remove('hidden');
+		teamHandles.classList.add('hidden');
+		clearTeamHandles(); // Clear team handles if switching back to individual
+	} else {
+		individualHandle.classList.add('hidden');
+		teamHandles.classList.remove('hidden');
+	}
+}
+
+function clearTeamHandles() {
+	document.getElementById('team_handle_1').value = '';
+	document.getElementById('team_handle_2').value = '';
+	document.getElementById('team_handle_3').value = '';
+}
+
+// Initialize the form with the correct fields visible
+document.addEventListener('DOMContentLoaded', (event) => {
+	toggleParticipantType();
+});

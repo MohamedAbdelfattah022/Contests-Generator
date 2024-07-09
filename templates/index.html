@@ -5,13 +5,9 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Problem Set Retrieval</title>
-
         <link rel="stylesheet"
             href="{{ url_for('static', filename='style.css') }}">
-
-        <link rel="icon"
-            href="{{ url_for('static', filename='favicon.ico') }}">
-
+        <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
     </head>
     <body>
         <div class="container">
@@ -29,10 +25,33 @@
                 <input type="number" id="problems_num" name="problems_num"
                     min="1" required>
                 <br>
+                <label>
+                    <input type="radio" name="participant_type"
+                        value="individual" onclick="toggleParticipantType()"
+                        checked> Individual
+                </label>
+                <label>
+                    <input type="radio" name="participant_type" value="team"
+                        onclick="toggleParticipantType()"> Team
+                </label>
+                <br>
+                <div id="individualHandle" class="handle-row">
+                    <input type="text" id="individual_handle"
+                        name="individual_handle" placeholder="Handle">
+                </div>
+                <div id="teamHandles" class="hidden">
+                    <div class="handle-row">
+                        <input type="text" id="team_handle_1"
+                            name="team_handle_1" placeholder="Handle 1">
+                        <input type="text" id="team_handle_2"
+                            name="team_handle_2" placeholder="Handle 2">
+                        <input type="text" id="team_handle_3"
+                            name="team_handle_3" placeholder="Handle 3">
+                    </div>
+                </div>
+                <br>
                 <input type="submit" value="Submit">
             </form>
-
-            <!-- Error modal -->
             <div id="errorModal" class="modal"
                 data-error-message="{{ error_message | join(' ') }}">
                 <div class="modal-content">
@@ -44,8 +63,7 @@
                     </div>
                 </div>
             </div>
-
-            <script
-                src="{{ url_for('static', filename='script.js') }}"></script>
-        </body>
-    </html>
+        </div>
+        <script src="{{ url_for('static', filename='script.js') }}"></script>
+    </body>
+</html>

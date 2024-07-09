@@ -3,6 +3,7 @@ body {
 	background-color: #f0f0f0;
 	margin: 0;
 	padding: 0;
+	height: 30em;
 }
 
 .container {
@@ -29,6 +30,7 @@ label {
 }
 
 input[type="number"],
+input[type="text"],
 input[type="submit"],
 #copyButton {
 	padding: 10px;
@@ -39,6 +41,7 @@ input[type="submit"],
 }
 
 input[type="number"]:focus,
+input[type="text"]:focus,
 input[type="submit"]:focus,
 #copyButton {
 	outline: none;
@@ -52,6 +55,7 @@ input[type="submit"],
 	font-weight: bold;
 	cursor: pointer;
 }
+
 #copyButton {
 	width: 100%;
 }
@@ -109,4 +113,20 @@ textarea:focus {
 .close:hover,
 .close:focus {
 	color: red;
+}
+
+.hidden {
+	display: none;
+}
+
+.handle-row {
+	display: flex;
+	flex-direction: row;
+	gap: 10px;
+	align-items: center;
+}
+
+.handle-row input {
+	flex: 1 1 auto;
+	width: calc(100% / 3); /* Distribute width equally for three inputs */
 }
