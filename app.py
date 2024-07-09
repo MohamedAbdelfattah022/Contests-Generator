@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, flash, redirect, url_for, get_flashed_messages
+from flask_caching import Cache
 import pandas as pd
 import sqlite3
 import requests
@@ -10,9 +11,11 @@ app = Flask(__name__)
 app.secret_key = 'e9aa5b78bce79caa06c445b364058979840b1ab60338fdc6'
 
 app.config['data_fetched'] = False
+app.config['CACHE_TYPE'] = 'simple'
+cache = Cache(app)
 
 @app.before_request
-def initialize_data():
+def initialize_data():  
     if not app.config['data_fetched']:
         try:
             fetch()
@@ -23,6 +26,7 @@ def initialize_data():
     else:
         print("Data Already Fetched")
 
+@cache.memoize(timeout=300)
 def retrieve_data(min_range, max_range, problems_num):
     conn = sqlite3.connect("problemset.db")
     query = f"SELECT * FROM problems WHERE rating >= {min_range} AND rating <= {max_range}"
@@ -42,6 +46,7 @@ def index():
     error_message = get_flashed_messages(category_filter=['error'])
     return render_template('index.html', error_message=error_message)
 
+@cache.memoize(timeout=300)
 def get_unsolved_problems(handles, min_range, max_range):
     conn = sqlite3.connect("problemset.db")
     query = f"SELECT * FROM problems WHERE rating >= {min_range} AND rating <= {max_range}"
