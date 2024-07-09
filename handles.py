@@ -10,10 +10,13 @@ def get_solved_problems(handle):
     
     data = requests.get(url)
     jsonObject = json.loads(data.text)
+
+    if jsonObject["status"] == "FAILED":
+        return pd.DataFrame()
+
     results = jsonObject["result"]
-    
     results_df = pd.DataFrame(results)
-    
+
     solved = results_df.loc[results_df["verdict"] == "OK"]
     solved = solved["problem"].drop_duplicates().reset_index(drop=True)
     
