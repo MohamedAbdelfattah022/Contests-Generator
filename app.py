@@ -3,9 +3,8 @@ from flask_caching import Cache
 import pandas as pd
 import sqlite3
 import requests
-import json
 from fetch_problemset import fetch
-from team import merge_solved_problems
+from handles import merge_solved_problems
 
 app = Flask(__name__)
 app.secret_key = 'e9aa5b78bce79caa06c445b364058979840b1ab60338fdc6'
