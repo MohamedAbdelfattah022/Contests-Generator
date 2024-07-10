@@ -4,14 +4,14 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Problem Set Retrieval</title>
+        <title>Contest Generator</title>
         <link rel="stylesheet"
             href="{{ url_for('static', filename='style.css') }}">
         <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
     </head>
     <body>
         <div class="container">
-            <h1>Problem Set Retrieval</h1>
+            <h1>Contest Generator</h1>
             <form action="/result" method="post">
                 <label for="min_range">Min Rating</label>
                 <input type="number" id="min_range" name="min_range" min="800"
